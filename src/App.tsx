@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
@@ -21,6 +21,7 @@ function App() {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
   const [menuItems, setMenuItems] = useState<FodmapItem[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -95,6 +96,10 @@ function App() {
     setMenuItems([])
   }
 
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const getFodmapColor = (level: string) => {
     switch (level) {
       case 'low': return 'bg-emerald-100 text-emerald-800'
@@ -149,19 +154,18 @@ function App() {
                     <p className="text-gray-600 mb-8">
                       Take a photo or upload an image of a restaurant menu to get started
                     </p>
-                    <label htmlFor="menu-upload" className="cursor-pointer">
-                      <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                        <FileImage className="w-5 h-5 mr-2" />
-                        Choose Image
-                      </Button>
-                      <input
-                        id="menu-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
+                    <Button size="lg" className="bg-blue-600 hover:bg-blue-700" onClick={handleButtonClick}>
+                      <FileImage className="w-5 h-5 mr-2" />
+                      Choose Image
+                    </Button>
+                    <input
+                      id="menu-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      ref={fileInputRef}
+                    />
                   </div>
                 </CardContent>
               </Card>
